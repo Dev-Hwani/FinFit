@@ -1,34 +1,52 @@
 package com.mysite.finfit.budget;
 
-import com.mysite.finfit.budget.Budget;
-import com.mysite.finfit.budget.BudgetService;
-import com.mysite.finfit.user.User;
-import com.mysite.finfit.user.UserService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import java.time.YearMonth;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/budgets")
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.mysite.finfit.user.User;
+
+import lombok.RequiredArgsConstructor;
+
+@Controller
 @RequiredArgsConstructor
 public class BudgetController {
 
-    private final BudgetService service;
-    private final UserService userService;
+	private final BudgetService budgetService;
 
-    @PostMapping("/{username}")
-    public Budget create(@PathVariable String username, @RequestBody Budget budget) {
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        budget.setUser(user);
-        return service.save(budget);
+    @GetMapping("/budget")
+    public String budgetList(Model model) {
+        List<Budget> budgets = budgetService.getAllBudgets();
+        model.addAttribute("budgets", budgets);
+        return "budget"; // budget.html
     }
+    
+    @PostMapping("/budget/save")
+    public String saveBudget(
+            @RequestParam("username") String username,
+            @RequestParam("category") String category,
+            @RequestParam("amount") BigDecimal amount,
+            @RequestParam("startDate") LocalDate startDate,
+            @RequestParam("endDate") LocalDate endDate
+    ) {
+        User user = budgetService.getUserByUsername(username);
 
-    @GetMapping("/{username}")
-    public List<Budget> getAll(@PathVariable String username) {
-        User user = userService.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return service.findByUser(user);
+        Budget budget = Budget.builder()
+                .user(user)
+                .category(category)
+                .amount(amount)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
+
+        budgetService.saveBudget(budget);
+
+        return "redirect:/budget";
     }
 }

@@ -1,0 +1,47 @@
+<style>
+    body {
+        background-color: #f9fafb;
+        font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+        color: #333;
+    }
+    .navbar {
+        background-color: white;
+        border-bottom: 1px solid #eee;
+    }
+    .navbar-brand {
+        font-weight: bold;
+        color: #0064FF !important;
+    }
+    .nav-link {
+        color: #333 !important;
+        font-weight: 500;
+    }
+    .nav-link:hover {
+        color: #0064FF !important;
+    }
+    .hero-section {
+        padding: 100px 20px;
+        text-align: center;
+    }
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #111;
+    }
+    .hero-subtitle {
+        font-size: 1.2rem;
+        margin-top: 15px;
+        color: #555;
+    }
+    .btn-primary {
+        background-color: #0064FF;
+        border: none;
+        font-weight: bold;
+    }
+    .btn-primary:hover {
+        background-color: #0052cc;
+    }
+    .btn-outline-dark {
+        font-weight: bold;
+    }
+</style>

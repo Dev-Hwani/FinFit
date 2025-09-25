@@ -53,27 +53,36 @@
 	</style>
 </head>
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" th:href="@{/}">FinFit</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+	<!-- 네비게이션 바 -->
+		<nav class="navbar navbar-expand-lg">
+		    <div class="container">
+		        <a class="navbar-brand" th:href="@{/}">FinFit</a>
+		        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+		                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		            <span class="navbar-toggler-icon"></span>
+		        </button>
 
-        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/incomeexpense}">가계부 관리</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/budget}">예산 관리</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+		        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+					<ul class="navbar-nav">
+					    <li class="nav-item">
+					        <a class="nav-link" th:href="@{/incomeexpense}">가계부 관리</a>
+					    </li>
+					    <li class="nav-item">
+					        <a class="nav-link" th:href="@{/budget}">예산 관리</a>
+					    </li>
+					    <li class="nav-item">
+					        <a class="nav-link" th:href="@{/signup}">회원가입</a>
+					    </li>
+					    <li class="nav-item">
+					        <a class="nav-link" th:href="@{/login}">로그인</a>
+					    </li>
+						<li class="nav-item">
+						    <a class="nav-link" th:href="@{/logout}">로그아웃</a>
+						</li>
+					</ul>
+		        </div>
+		    </div>
+		</nav>
 
 <div class="container mt-5">
     <h1 class="mb-4 fw-bold">가계부 입력</h1>

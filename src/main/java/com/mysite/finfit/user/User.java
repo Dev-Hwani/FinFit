@@ -2,6 +2,8 @@ package com.mysite.finfit.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,6 +36,10 @@ public class User {
 
     @Column(nullable = false)
     private boolean enabled = true; // 계정 활성화 여부
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
     // 비밀번호 변경 편의 메서드
     public void updatePassword(String encodedPassword) {

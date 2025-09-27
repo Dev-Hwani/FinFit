@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class IncomeExpenseController {
 
-	private final IncomeExpenseService incomeExpenseService;
+    private final IncomeExpenseService incomeExpenseService;
 
     @GetMapping("/incomeexpense")
     public String incomeExpenseList(Model model) {
@@ -26,18 +28,21 @@ public class IncomeExpenseController {
         model.addAttribute("incomeExpenses", list);
         return "incomeexpense"; // incomeexpense.html
     }
-    
-    @PostMapping("/incomeexpense/save{id}")
+
+    @PostMapping("/incomeexpense/save")
     public String saveIncomeExpense(
-            @RequestParam("username") String username,
             @RequestParam("type") IncomeExpense.Type type,
             @RequestParam("category") String category,
             @RequestParam("amount") BigDecimal amount,
             @RequestParam("date") LocalDate date,
             @RequestParam(value = "description", required = false) String description
     ) {
+        // 현재 로그인한 사용자 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName(); 
+
         // 1. 서비스 통해 사용자 조회
-        User user = incomeExpenseService.getUserByUsername(username);
+        User user = incomeExpenseService.getUserByUsername(email);
 
         // 2. 데이터 생성
         IncomeExpense ie = IncomeExpense.builder()

@@ -31,10 +31,10 @@ public class IncomeExpenseService {
         incomeExpenseRepository.deleteById(id);
     }
 
-    // 사용자 이름으로 User 조회
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    // 사용자 이메일로 User 조회 (username → email)
+    public User getUserByUsername(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
     }
 
 }

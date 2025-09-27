@@ -20,6 +20,11 @@ public class IncomeExpenseService {
     public List<IncomeExpense> getAllIncomeExpenses() {
         return incomeExpenseRepository.findAll();
     }
+    
+    public List<IncomeExpense> getIncomeExpensesByUser(User user) {
+        return incomeExpenseRepository.findByUser(user);
+    }
+
 
     // 저장
     public IncomeExpense saveIncomeExpense(IncomeExpense ie) {

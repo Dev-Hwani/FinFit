@@ -24,8 +24,17 @@ public class IncomeExpenseController {
 
     @GetMapping("/incomeexpense")
     public String incomeExpenseList(Model model) {
-        List<IncomeExpense> list = incomeExpenseService.getAllIncomeExpenses();
+        // 현재 로그인한 사용자 email 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        // 사용자 조회
+        User user = incomeExpenseService.getUserByUsername(email);
+
+        // 해당 사용자 가계부 목록만 조회
+        List<IncomeExpense> list = incomeExpenseService.getIncomeExpensesByUser(user);
         model.addAttribute("incomeExpenses", list);
+
         return "incomeexpense"; // incomeexpense.html
     }
 

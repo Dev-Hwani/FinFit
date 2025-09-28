@@ -21,13 +21,17 @@
                 <li class="nav-item" th:if="${#authorization.expression('isAnonymous()')}">
                     <a class="nav-link" th:href="@{/signup}">회원가입</a>
                 </li>
+                <li class="nav-item dropdown" th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <span sec:authentication="principal.username"></span>님
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" th:href="@{/mypage}">마이페이지</a></li>
+                        <li><a class="dropdown-item" th:href="@{/logout}">로그아웃</a></li>
+                    </ul>
+                </li>
 
-                <li class="nav-item d-flex align-items-center" th:if="${#authorization.expression('isAuthenticated()')}">
-                    <span class="nav-link disabled" sec:authentication="principal.username">님</span>
-                </li>
-                <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a class="nav-link" th:href="@{/logout}">로그아웃</a>
-                </li>
             </ul>
         </div>
     </div>

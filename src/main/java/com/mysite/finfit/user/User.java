@@ -1,5 +1,7 @@
 package com.mysite.finfit.user;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -40,6 +42,15 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserRole role;
+    
+    @Column(length = 20)
+    private String phoneNumber; // 전화번호
+
+    @Column
+    private LocalDate birthDate; // 생년월일
+
+    @Column(length = 200)
+    private String address; // 주소
 
     // 비밀번호 변경 편의 메서드
     public void updatePassword(String encodedPassword) {

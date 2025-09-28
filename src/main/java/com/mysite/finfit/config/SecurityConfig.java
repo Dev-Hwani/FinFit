@@ -28,6 +28,8 @@ public class SecurityConfig {
                 		new AntPathRequestMatcher("/"),        // 홈 페이지 허용
                         new AntPathRequestMatcher("/signup"),  // 회원가입 허용
                         new AntPathRequestMatcher("/login"),   // 로그인 허용
+                        new AntPathRequestMatcher("/find/email"),
+                        new AntPathRequestMatcher("/find/password"),
                         new AntPathRequestMatcher("/css/**"),
                         new AntPathRequestMatcher("/js/**"),
                         new AntPathRequestMatcher("/images/**")

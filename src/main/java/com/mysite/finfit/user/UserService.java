@@ -1,5 +1,7 @@
 package com.mysite.finfit.user;
 
+import java.time.LocalDate;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +22,7 @@ public class UserService {
             Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=]).{8,}$");
 
     // 회원가입
-    public User registerUser(String username, String password, String confirmPassword, String email) {
+    public User registerUser(String username, String password, String confirmPassword, String email, String phoneNumber, LocalDate birthDate, String address) {
         validateUsername(username);
         validatePassword(password);
         validatePasswordMatch(password, confirmPassword);
@@ -40,6 +42,9 @@ public class UserService {
                 .email(email)
                 .enabled(true)
                 .role(role) // User 엔티티에 UserRole role 필드가 있어야 함
+                .phoneNumber(phoneNumber)
+                .birthDate(birthDate)
+                .address(address)
                 .build();
 
         return userRepository.save(user);
@@ -112,4 +117,59 @@ public class UserService {
 
         return user;
     }
+    
+    // 이메일로 User 조회
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+    }
+    
+    // 현재 비밀번호 확인
+    public boolean checkPassword(String email, String rawPassword) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException("사용자를 찾을 수 없습니다."));
+        return passwordEncoder.matches(rawPassword, user.getPassword());
+    }
+
+    // 사용자 정보 업데이트
+    public void updateUserInfo(String email, String username, String newPassword, boolean enabled, String phoneNumber, LocalDate birthDate, String address) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserException("사용자를 찾을 수 없습니다."));
+
+        user.setUsername(username);
+        user.setEnabled(enabled);
+        user.setPhoneNumber(phoneNumber);
+        user.setBirthDate(birthDate);
+        user.setAddress(address);
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+        }
+
+        userRepository.save(user);
+    }
+    
+    // 이메일 찾기
+    public String findEmail(String username, String phoneNumber) {
+        User user = userRepository.findByUsernameAndPhoneNumber(username, phoneNumber)
+                .orElseThrow(() -> new UserException("일치하는 사용자가 없습니다."));
+        return user.getEmail();
+    }
+
+    // 비밀번호 초기화 (임시 비밀번호 생성)
+    public String resetPassword(String email, String phoneNumber) {
+        User user = userRepository.findByEmailAndPhoneNumber(email, phoneNumber)
+                .orElseThrow(() -> new UserException("일치하는 사용자가 없습니다."));
+
+        String tempPassword = generateTempPassword(); // 임시 비밀번호 생성
+        user.setPassword(passwordEncoder.encode(tempPassword));
+        userRepository.save(user);
+        return tempPassword;
+    }
+
+    // 임시 비밀번호 생성
+    private String generateTempPassword() {
+        return UUID.randomUUID().toString().substring(0, 8); // 8자리 임시 비밀번호
+    }
+
 }

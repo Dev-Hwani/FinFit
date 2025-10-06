@@ -47,4 +47,12 @@ public class Budget {
         this.startDate = start;
         this.endDate = end;
     }
+    
+    public void assignUser(User user) {
+        this.user = user;
+        if (!user.getBudgets().contains(this)) {
+            user.getBudgets().add(this);
+        }
+    }
+
 }

@@ -63,5 +63,9 @@ public class IncomeExpense {
     // 연관관계 편의 메서드
     public void assignUser(User user) {
         this.user = user;
+        if (!user.getIncomeExpenses().contains(this)) {
+            user.getIncomeExpenses().add(this);
+        }
     }
+
 }

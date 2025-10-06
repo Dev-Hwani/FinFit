@@ -1,7 +1,13 @@
 package com.mysite.finfit.user;
 
+import java.util.List;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
+import com.mysite.finfit.account.IncomeExpense;
+import com.mysite.finfit.budget.Budget;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -36,6 +43,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 100)
     private String email;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean enabled = true; // 계정 활성화 여부
     
@@ -51,6 +59,37 @@ public class User {
 
     @Column(length = 200)
     private String address; // 주소
+    
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<IncomeExpense> incomeExpenses = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Budget> budgets = new ArrayList<>();
+    
+    // ================================
+    // 연관관계 편의 메서드
+    // ================================
+    public void addIncomeExpense(IncomeExpense ie) {
+        incomeExpenses.add(ie);
+        ie.setUser(this);
+    }
+
+    public void removeIncomeExpense(IncomeExpense ie) {
+        incomeExpenses.remove(ie);
+        ie.setUser(null);
+    }
+
+    public void addBudget(Budget budget) {
+        budgets.add(budget);
+        budget.setUser(this);
+    }
+
+    public void removeBudget(Budget budget) {
+        budgets.remove(budget);
+        budget.setUser(null);
+    }
 
     // 비밀번호 변경 편의 메서드
     public void updatePassword(String encodedPassword) {

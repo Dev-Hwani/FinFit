@@ -1,47 +1,249 @@
 <style>
-    body {
-        background-color: #f9fafb;
-        font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
-        color: #333;
-    }
-    .navbar {
-        background-color: white;
-        border-bottom: 1px solid #eee;
-    }
-    .navbar-brand {
-        font-weight: bold;
-        color: #0064FF !important;
-    }
-    .nav-link {
-        color: #333 !important;
-        font-weight: 500;
-    }
-    .nav-link:hover {
-        color: #0064FF !important;
-    }
-    .hero-section {
-        padding: 100px 20px;
-        text-align: center;
-    }
-    .hero-title {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #111;
-    }
-    .hero-subtitle {
-        font-size: 1.2rem;
-        margin-top: 15px;
-        color: #555;
-    }
-    .btn-primary {
-        background-color: #0064FF;
-        border: none;
-        font-weight: bold;
-    }
-    .btn-primary:hover {
-        background-color: #0052cc;
-    }
-    .btn-outline-dark {
-        font-weight: bold;
-    }
+/* ===================== 기본 스타일 ===================== */
+body {
+    background-color: #f9fafb;
+    font-family: 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: white;
+    border-bottom: 1px solid #eee;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #0064FF !important;
+}
+
+.nav-link {
+    color: #333 !important;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: #0064FF !important;
+}
+
+.hero-section {
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #111;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    margin-top: 15px;
+    color: #555;
+}
+
+.btn-primary {
+    background-color: #0064FF;
+    border: none;
+    font-weight: bold;
+}
+
+.btn-primary:hover {
+    background-color: #0052cc;
+}
+
+.btn-outline-dark {
+    font-weight: bold;
+}
+
+/* ===================== 요약 카드 ===================== */
+.summary-card {
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.summary-title {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* ===================== 폼 카드 ===================== */
+.form-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* ===================== 달력 네비게이션 ===================== */
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendar-nav button {
+    width: 120px;
+}
+
+/* ===================== 달력 테이블 ===================== */
+.calendar-table {
+    table-layout: fixed; /* 칸 너비 균등 분배 */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar-table th, .calendar-table td {
+    text-align: left;
+    vertical-align: top;
+    height: 120px;
+    padding: 8px;
+    width: 14.2857%; /* 7일 기준 */
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+}
+
+.calendar-day-number {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+/* ===================== 이벤트 컨테이너 ===================== */
+.event-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: calc(120px - 28px); /* 날짜 숫자 공간 제외 */
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* 스크롤바 스타일 */
+.event-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.event-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+/* ===================== 이벤트 스타일 ===================== */
+.event-income {
+    background-color: #cce5ff;
+    color: #0d6efd;
+    padding: 2px 4px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.event-expense {
+    background-color: #ffe5e5;
+    color: #842029;
+    padding: 2px 4px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+/* 모달 배경 투명하게, 그림자 강조 */
+.modal-content {
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+    padding: 20px;
+    border: none;
+    font-family: 'Apple SD Gothic Neo', 'Segoe UI', sans-serif;
+}
+
+/* 헤더 스타일 */
+.modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111;
+}
+
+/* 닫기 버튼 */
+.btn-close {
+    filter: brightness(0.6);
+}
+.btn-close:hover {
+    filter: brightness(1);
+}
+
+/* 본문 텍스트 스타일 */
+.modal-body {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#modalCategory {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0064FF; /* 토스 블루 */
+}
+
+#modalDescription {
+    font-size: 0.9rem;
+    color: #555;
+    word-break: break-word;
+}
+
+#modalAmount {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+}
+
+/* 푸터 버튼 */
+.modal-footer {
+    border-top: none;
+    justify-content: flex-end;
+    padding-top: 10px;
+}
+
+.modal-footer .btn-secondary {
+    background-color: #f8f9fa;
+    color: #333;
+    border-radius: 12px;
+    padding: 6px 16px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #e2e6ea;
+}
+
+/* 모달 애니메이션 */
+.modal.fade .modal-dialog {
+    transform: translateY(-50px);
+    transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: translateY(0);
+}
 </style>

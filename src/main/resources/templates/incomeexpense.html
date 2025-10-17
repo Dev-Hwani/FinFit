@@ -5,26 +5,6 @@
     <title>가계부 관리 | FinFit</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <style>
-        .summary-card { border-radius: 12px; background-color: #f8f9fa; padding: 20px; }
-        .summary-title { font-size: 1rem; color: #6c757d; }
-        .summary-value { font-size: 1.5rem; font-weight: bold; }
-        .ie-card { border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-        .ie-buttons button { margin-left: 5px; }
-        .form-card { border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
-
-        /* 달력 스타일 */
-        .calendar-card { border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
-        .calendar-table th, .calendar-table td { text-align: left; vertical-align: top; height: 110px; padding: 8px; }
-        .calendar-day-number { font-weight: 700; display:block; margin-bottom:6px; }
-        .event-badge { display:block; margin-top:4px; font-size:0.85rem; padding: .35rem .5rem; border-radius:.25rem; }
-        .event-income { background-color:#cce5ff; color:#0f5132; }
-        .event-expense { background-color:#f8d7da; color:#9a1b1b; }
-
-        /* 달력 컨트롤 버튼 위치 조정 */
-        .calendar-controls { gap:10px; }
-        .small-muted { font-size:0.9rem; color:#6c757d; }
-    </style>
 </head>
 <body>
 <nav th:replace="~{navbar :: navbarFragment}"></nav>
@@ -32,30 +12,30 @@
 <div class="container mt-5">
     <h1 class="mb-4 fw-bold text-center">가계부 관리</h1>
 
-    <!-- 월별 요약 -->
-    <div class="row text-center mb-4">
-        <div class="col-md-4 mb-3">
-            <div class="summary-card">
-                <div class="summary-title">총 수입</div>
-                <div class="summary-value text-primary"
-                     th:text="${#numbers.formatDecimal(summary.income,0,'COMMA',2,'POINT')}">0</div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="summary-card">
-                <div class="summary-title">총 지출</div>
-                <div class="summary-value text-danger"
-                     th:text="${#numbers.formatDecimal(summary.expense,0,'COMMA',2,'POINT')}">0</div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <div class="summary-card">
-                <div class="summary-title">잔액</div>
-                <div class="summary-value"
-                     th:text="${#numbers.formatDecimal(summary.balance,0,'COMMA',2,'POINT')}">0</div>
-            </div>
-        </div>
-    </div>
+	<!-- 월별 요약 -->
+	<div class="row text-center mb-4">
+	    <div class="col-md-4 mb-3">
+	        <div class="summary-card">
+	            <div class="summary-title">총 수입</div>
+	            <div id="summaryIncome" class="summary-value text-primary"
+	                 th:text="${#numbers.formatDecimal(summary.income,0,'COMMA',0,'POINT')}">0</div>
+	        </div>
+	    </div>
+	    <div class="col-md-4 mb-3">
+	        <div class="summary-card">
+	            <div class="summary-title">총 지출</div>
+	            <div id="summaryExpense" class="summary-value text-danger"
+	                 th:text="${#numbers.formatDecimal(summary.expense,0,'COMMA',0,'POINT')}">0</div>
+	        </div>
+	    </div>
+	    <div class="col-md-4 mb-3">
+	        <div class="summary-card">
+	            <div class="summary-title">잔액</div>
+	            <div id="summaryBalance" class="summary-value"
+	                 th:text="${#numbers.formatDecimal(summary.balance,0,'COMMA',0,'POINT')}">0</div>
+	        </div>
+	    </div>
+	</div>
 
     <!-- 가계부 입력 폼 -->
     <div class="card form-card mb-4 p-4">
@@ -93,244 +73,417 @@
         </form>
     </div>
 
-    <!-- 달력 영역 (Bootstrap 테이블 기반) -->
-    <div class="card calendar-card mb-4 p-3">
-        <div class="d-flex justify-content-between align-items-center calendar-controls mb-3">
-            <div>
-                <button class="btn btn-outline-secondary btn-sm" id="prevMonthBtn">&lt; 이전</button>
-                <button class="btn btn-outline-secondary btn-sm" id="nextMonthBtn">다음 &gt;</button>
-            </div>
-            <div class="text-center">
-                <h5 id="calendarTitle" class="mb-0"></h5>
-                <div class="small-muted" id="calendarSubtitle">이벤트를 클릭하면 상세보기(구현 필요)</div>
-            </div>
-            <div>
-                <button class="btn btn-outline-secondary btn-sm" id="todayBtn">오늘</button>
-            </div>
+    <!-- 달력 -->
+    <div class="card form-card mb-4 p-3">
+        <div class="calendar-nav mb-2">
+            <button id="prevMonth" class="btn btn-outline-primary">&lt; 이전 달</button>
+            <h5 id="calendarTitle" class="mb-0"></h5>
+            <button id="nextMonth" class="btn btn-outline-primary">다음 달 &gt;</button>
         </div>
-
-        <div class="table-responsive">
-            <table class="table table-bordered calendar-table">
-                <thead class="table-light">
-                    <tr>
-                        <th>일</th>
-                        <th>월</th>
-                        <th>화</th>
-                        <th>수</th>
-                        <th>목</th>
-                        <th>금</th>
-                        <th>토</th>
-                    </tr>
-                </thead>
-                <tbody id="calendarBody">
-                    <!-- JS로 채움 -->
-                </tbody>
-            </table>
-        </div>
+        <table class="table table-bordered text-center calendar-table mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>일</th>
+                    <th>월</th>
+                    <th>화</th>
+                    <th>수</th>
+                    <th>목</th>
+                    <th>금</th>
+                    <th>토</th>
+                </tr>
+            </thead>
+            <tbody id="calendarBody">
+                <!-- JS로 채워짐 -->
+            </tbody>
+        </table>
     </div>
-
-    <!-- 가계부 목록 -->
-    <h4 class="mb-3 fw-bold">가계부 내역</h4>
-    <div class="row g-3">
-        <div class="col-md-4 mb-3" th:each="ie : ${incomeExpenses}">
-            <div class="card ie-card p-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold mb-1" th:text="${ie.category}">카테고리</div>
-                        <div>
-                            타입:
-                            <span th:text="${ie.type}"
-                                  th:classappend="(${ie.type} == 'INCOME') ? ' text-primary fw-bold' : ' text-danger fw-bold'">
-                            </span>
-                        </div>
-                        <div>
-                            금액:
-                            <span th:text="${#numbers.formatDecimal(ie.amount,0,'COMMA',2,'POINT')}"></span>
-                        </div>
-                        <div>날짜: <span th:text="${ie.date}"></span></div>
-                        <div th:if="${ie.description != null}">설명: <span th:text="${ie.description}"></span></div>
-                    </div>
-                    <div class="ie-buttons d-flex flex-column">
-                        <button class="btn btn-sm btn-warning mb-2"
-                                data-bs-toggle="modal"
-                                th:data-bs-target="${'#editModal' + ie.id}">수정</button>
-                        <form th:action="@{/incomeexpense/delete}" method="post" th:object="${ie}"
-                              onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                            <input type="hidden" name="id" th:value="${ie.id}" />
-                            <button type="submit" class="btn btn-sm btn-danger">삭제</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 모달: 수정 -->
-    <div th:each="ie : ${incomeExpenses}" th:id="${'editModal' + ie.id}" class="modal fade" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content p-3">
-                <form th:action="@{/incomeexpense/update}" method="post">
-                    <input type="hidden" name="id" th:value="${ie.id}" />
-                    <div class="mb-3">
-                        <label class="form-label">타입</label>
-                        <select name="type" class="form-select" required>
-                            <option th:selected="${ie.type == 'INCOME'}" value="INCOME">수입</option>
-                            <option th:selected="${ie.type == 'EXPENSE'}" value="EXPENSE">지출</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">카테고리</label>
-                        <input type="text" name="category" class="form-control" th:value="${ie.category}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">금액</label>
-                        <input type="number" name="amount" class="form-control" th:value="${ie.amount}" step="0.01" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">날짜</label>
-                        <input type="date" name="date" class="form-control" th:value="${ie.date}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">설명</label>
-                        <input type="text" name="description" class="form-control" th:value="${ie.description}">
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">수정 저장</button>
-                </form>
-            </div>
-        </div>
-    </div>
+	<!-- 가계부 내역 모달 -->
+	<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="eventModalLabel">가계부 내역</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <p id="modalCategory"></p>
+	        <p id="modalDescription"></p>
+	        <p id="modalAmount"></p>
+	      </div>
+	      <div class="modal-footer d-flex justify-content-between">
+	        <div>
+	          <button type="button" id="editEventBtn" class="btn btn-primary">수정</button>
+	          <button type="button" id="deleteEventBtn" class="btn btn-danger">삭제</button>
+	        </div>
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- 수정 모달 -->
+	<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">가계부 내역 수정</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+	      </div>
+	      <div class="modal-body">
+	        <input type="hidden" id="editId">
+			<div class="mb-3">
+			  <label>타입</label>
+			  <select id="editType" class="form-select">
+			    <option value="INCOME">수입</option>
+			    <option value="EXPENSE">지출</option>
+			  </select>
+			</div>
+	        <div class="mb-3">
+	          <label>카테고리</label>
+	          <input type="text" id="editCategory" class="form-control">
+	        </div>
+	        <div class="mb-3">
+	          <label>금액</label>
+	          <input type="number" id="editAmount" class="form-control">
+	        </div>
+	        <div class="mb-3">
+	          <label>날짜</label>
+	          <input type="date" id="editDate" class="form-control">
+	        </div>
+	        <div class="mb-3">
+	          <label>설명</label>
+	          <textarea id="editDescription" class="form-control"></textarea>
+	        </div>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" id="saveEditBtn" class="btn btn-primary">저장</button>
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- 달력 로직: 서버에서 /incomeexpense/events 로 JSON 받아와서 테이블에 배치 -->
 <script>
 (function(){
-    // 현재 보이는 연월을 관리
     const state = { date: new Date() };
-
-    // 날짜 -> 이벤트 목록 맵 (yyyy-mm-dd -> [events])
     let eventsByDate = {};
+    let currentEvent = null; // 현재 클릭한 이벤트 저장
 
-    // 서버에서 이벤트 불러오기
+    // 서버에서 이벤트 가져오기
     async function loadEvents() {
         try {
             const res = await fetch('/incomeexpense/events', { credentials: 'same-origin' });
-            if (!res.ok) throw new Error('events fetch failed: ' + res.status);
+            if(!res.ok) throw new Error('events fetch failed: ' + res.status);
             const data = await res.json();
-            // data expected: [{title, start, color, category, description}, ...]
             eventsByDate = {};
             data.forEach(ev => {
-                // ensure date format yyyy-mm-dd
-                const d = ev.start;
-                if (!eventsByDate[d]) eventsByDate[d] = [];
-                eventsByDate[d].push(ev);
+                let key = ev.start;
+                if(!eventsByDate[key]) eventsByDate[key] = [];
+                eventsByDate[key].push(ev);
             });
-        } catch (err) {
-            console.error('Failed to load events:', err);
-            eventsByDate = {}; // fallback empty
+        } catch(err) {
+            console.error(err);
         }
     }
 
-    // 캘린더 렌더
+    // 달력 렌더링
     function renderCalendar() {
-        const date = state.date;
-        const year = date.getFullYear();
-        const month = date.getMonth(); // 0-indexed
-        const firstOfMonth = new Date(year, month, 1);
-        const lastOfMonth = new Date(year, month + 1, 0);
-        const startWeekday = firstOfMonth.getDay(); // 0=Sun..6=Sat
-        const daysInMonth = lastOfMonth.getDate();
+        const year = state.date.getFullYear();
+        const month = state.date.getMonth();
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        document.getElementById('calendarTitle').innerText = `${year}년 ${month+1}월`;
-
+        document.getElementById('calendarTitle').innerText = year + '년 ' + (month+1) + '월';
         const tbody = document.getElementById('calendarBody');
         tbody.innerHTML = '';
-
         let row = document.createElement('tr');
-        // fill leading empty cells
-        for (let i = 0; i < startWeekday; i++) {
-            const empty = document.createElement('td');
-            row.appendChild(empty);
-        }
 
-        for (let day = 1; day <= daysInMonth; day++) {
-            if (row.children.length === 7) {
-                tbody.appendChild(row);
-                row = document.createElement('tr');
-            }
+        for(let i=0; i<firstDay; i++) row.appendChild(document.createElement('td'));
 
+        for(let day=1; day<=daysInMonth; day++){
+            if(row.children.length === 7){ tbody.appendChild(row); row = document.createElement('tr'); }
             const cell = document.createElement('td');
-            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
 
-            // day number
             const dayNum = document.createElement('div');
             dayNum.className = 'calendar-day-number';
             dayNum.innerText = day;
             cell.appendChild(dayNum);
 
-            // attach events if any
-            const evs = eventsByDate[dateStr];
-            if (evs && evs.length) {
+            const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+            const evs = eventsByDate[dateKey] || [];
+            if(evs.length){
+                const container = document.createElement('div');
+                container.className = 'event-container';
                 evs.forEach(ev => {
-                    const badge = document.createElement('div');
-                    badge.className = 'event-badge ' + (ev.color === 'green' || ev.color === 'INCOME' || ev.color === 'income' ? 'event-income' : 'event-expense');
-                    // display category + amount or title
-                    let label = '';
-                    if (ev.category) label += ev.category;
-                    if (ev.description) label += (label ? ' - ' : '') + ev.description;
-                    // show title or amount fallback
-                    if (!label) label = ev.title || '';
-                    badge.innerText = label;
-                    // click handler to open modal if exists (by matching date/title -> optional)
-                    badge.style.cursor = 'pointer';
-                    badge.addEventListener('click', function() {
-                        // Try to find matching modal by event data (if your modal ids are 'editModal' + id and server provides id)
-                        // If event has id and modal exists, show it:
-                        if (ev.id) {
-                            const modalEl = document.getElementById('editModal' + ev.id);
-                            if (modalEl) {
-                                const bsModal = new bootstrap.Modal(modalEl);
-                                bsModal.show();
-                                return;
-                            }
-                        }
-                        // Otherwise, simple alert as fallback:
-                        if (ev.title || ev.category || ev.description) {
-                            alert((ev.title ? ev.title + '\n' : '') + (ev.category ? '카테고리: ' + ev.category + '\n' : '') + (ev.description ? '설명: ' + ev.description : ''));
-                        }
-                    });
-                    cell.appendChild(badge);
+                    const div = document.createElement('div');
+					const amount = Number(ev.title.split(' ')[1] || 0).toLocaleString(); 
+					const type = ev.title.split(' ')[0]; // INCOME / EXPENSE
+					const displayType = type === 'INCOME' ? '수입' : '지출';
+                    div.className = ev.color==="green"?'event-income':'event-expense';
+                    div.innerText = `${ev.category || ''} ${ev.title.split(' ')[1] || ''}원`;
+					div.innerText = `${displayType} ${amount}원 (${ev.category || ''})`;
+					div.addEventListener('click', ()=> {
+					    currentEvent = ev;
+
+					    // 수입/지출 구분 표시
+					    const typeText = ev.color === "green" ? "수입" : "지출";
+					    document.getElementById('modalCategory').innerText = "카테고리: " + (ev.category || '') + " (" + typeText + ")";
+
+					    // 금액 천 단위 콤마 처리
+					    const amount = ev.title.split(' ')[1] || '0';
+					    const formattedAmount = Number(amount).toLocaleString();
+					    document.getElementById('modalAmount').innerText = "금액: " + formattedAmount + "원";
+
+					    document.getElementById('modalDescription').innerText = "설명: " + (ev.description || '');
+
+					    new bootstrap.Modal(document.getElementById('eventModal')).show();
+					});
+
+                    container.appendChild(div);
                 });
+                cell.appendChild(container);
             }
 
             row.appendChild(cell);
         }
-
-        // fill trailing empty cells
-        while (row.children.length < 7) {
-            row.appendChild(document.createElement('td'));
-        }
+        while(row.children.length < 7) row.appendChild(document.createElement('td'));
         tbody.appendChild(row);
     }
 
-    // navigation handlers
-    function prevMonth() { state.date.setMonth(state.date.getMonth() - 1); renderCalendar(); }
-    function nextMonth() { state.date.setMonth(state.date.getMonth() + 1); renderCalendar(); }
-    function goToday() { state.date = new Date(); renderCalendar(); }
+	document.getElementById('prevMonth').addEventListener('click', async ()=>{
+	    state.date.setMonth(state.date.getMonth() - 1);
+	    renderCalendar();
+	    await loadMonthlySummary(); 
+	});
 
-    document.getElementById('prevMonthBtn').addEventListener('click', () => { prevMonth(); });
-    document.getElementById('nextMonthBtn').addEventListener('click', () => { nextMonth(); });
-    document.getElementById('todayBtn').addEventListener('click', () => { goToday(); });
+	document.getElementById('nextMonth').addEventListener('click', async ()=>{
+	    state.date.setMonth(state.date.getMonth() + 1);
+	    renderCalendar();
+	    await loadMonthlySummary(); 
+	});
 
-    // 초기 로드: 이벤트 가져오고 캘린더 렌더
-    (async function init() {
+	
+	// ✅ 월별 요약 데이터 불러오기
+	async function loadMonthlySummary() {
+	    const year = state.date.getFullYear();
+	    const month = state.date.getMonth() + 1;
+
+	    try {
+	        const res = await fetch(`/incomeexpense/summary?year=${year}&month=${month}`, {
+	            credentials: 'same-origin'
+	        });
+	        if (!res.ok) throw new Error('요약 데이터 불러오기 실패');
+	        const data = await res.json();
+
+	        document.getElementById('summaryIncome').innerText = `${Number(data.income || 0).toLocaleString()}원`;
+	        document.getElementById('summaryExpense').innerText = `${Number(data.expense || 0).toLocaleString()}원`;
+	        document.getElementById('summaryBalance').innerText = `${Number(data.balance || 0).toLocaleString()}원`;
+
+	    } catch (err) {
+	        console.error(err);
+	    }
+	}
+
+
+	// 삭제
+	document.getElementById('deleteEventBtn').addEventListener('click', ()=>{
+	    if(!currentEvent) return;
+	    if(confirm('정말 삭제하시겠습니까?')){
+	        fetch('/incomeexpense/delete?id='+currentEvent.id, { method:'POST', credentials:'same-origin' })
+	            .then(res => {
+	                if(!res.ok) throw new Error('삭제 실패');
+	                alert('삭제가 완료되었습니다.');
+	                location.reload(); // 페이지 새로고침
+	            })
+	            .catch(err=>alert('삭제 중 오류 발생: '+err));
+	        bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
+	    }
+	});
+
+	// DOM이 완전히 로드된 후 실행
+	document.addEventListener('DOMContentLoaded', () => {
+
+	    // 수정 버튼
+	    const editBtn = document.getElementById('editEventBtn');
+	    if (editBtn) {
+	        editBtn.addEventListener('click', () => {
+	            if (!currentEvent) {
+	                alert('수정할 항목이 선택되지 않았습니다.');
+	                return;
+	            }
+
+	            console.log('현재 이벤트 데이터:', currentEvent);
+
+	            // 금액 처리
+	            let amount = '';
+	            if (currentEvent.extendedProps && currentEvent.extendedProps.amount) {
+	                amount = currentEvent.extendedProps.amount;
+	            } else if (currentEvent.title && currentEvent.title.includes(' ')) {
+	                amount = currentEvent.title.split(' ')[1] || '';
+	            }
+
+	            // 날짜 처리 (Date 객체면 yyyy-MM-dd로 변환)
+	            let dateValue = '';
+	            if (currentEvent.start instanceof Date) {
+	                dateValue = currentEvent.start.toISOString().split('T')[0];
+	            } else {
+	                dateValue = currentEvent.startStr || currentEvent.start || '';
+	            }
+
+	            // 모달 입력값 채우기
+	            document.getElementById('editId').value = currentEvent.id;
+	            document.getElementById('editType').value = currentEvent.extendedProps?.type || currentEvent.type || '';
+	            document.getElementById('editCategory').value = currentEvent.extendedProps?.category || currentEvent.category || '';
+	            document.getElementById('editAmount').value = amount;
+	            document.getElementById('editDate').value = dateValue;
+	            document.getElementById('editDescription').value = currentEvent.extendedProps?.description || currentEvent.description || '';
+
+	            // 기존 모달 닫고 수정 모달 열기
+	            const eventModal = bootstrap.Modal.getInstance(document.getElementById('eventModal'));
+	            if (eventModal) eventModal.hide();
+
+	            new bootstrap.Modal(document.getElementById('editModal')).show();
+	        });
+	    }
+
+		// 수정 모달 저장 버튼
+		const saveBtn = document.getElementById('saveEditBtn');
+		if (saveBtn) {
+		    saveBtn.addEventListener('click', async () => {
+		        const id = document.getElementById('editId').value;
+		        const type = document.getElementById('editType').value.trim();
+		        const category = document.getElementById('editCategory').value.trim();
+		        const amount = document.getElementById('editAmount').value.trim();
+		        const date = document.getElementById('editDate').value.trim();
+		        const description = document.getElementById('editDescription').value.trim();
+
+		        if (!id || !amount || !date) {
+		            alert('필수 입력값이 누락되었습니다.');
+		            return;
+		        }
+
+		        const formData = new URLSearchParams();
+		        formData.append('id', id);
+		        formData.append('type', type);
+		        formData.append('category', category);
+		        formData.append('amount', amount);
+		        formData.append('date', date);
+		        formData.append('description', description);
+
+		        try {
+		            const res = await fetch('/incomeexpense/update', {
+		                method: 'POST',
+		                body: formData,
+		                credentials: 'same-origin',
+		                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+		            });
+
+		            if (!res.ok) throw new Error('수정 실패 (HTTP ' + res.status + ')');
+
+		            const resultText = await res.text();
+		            console.log('서버 응답:', resultText);
+
+		            alert('수정이 완료되었습니다.');
+
+		            // FullCalendar 이벤트 실시간 갱신
+		            if (window.calendar && currentEvent) {
+		                // ⚙️ title도 새 type 기준으로 강제 갱신
+		                const typeLabel = (type === 'INCOME') ? '수입' : '지출';
+		                currentEvent.setProp('title', `${typeLabel} ${amount}원`);
+
+		                // ⚙️ 모든 확장 프로퍼티 덮어쓰기
+		                currentEvent.setExtendedProp('type', type);
+		                currentEvent.setExtendedProp('category', category);
+		                currentEvent.setExtendedProp('amount', amount);
+		                currentEvent.setExtendedProp('description', description);
+
+		                // 날짜 갱신
+		                currentEvent.setStart(date);
+		                currentEvent.setEnd(date);
+
+		                // 🔄 즉시 화면 반영
+		                window.calendar.refetchEvents();
+		            } else {
+		                location.reload();
+		            }
+		        } catch (err) {
+		            alert('수정 중 오류 발생: ' + err.message);
+		            console.error('❌ 수정 오류:', err);
+		        } finally {
+		            const modalEl = document.getElementById('editModal');
+		            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+		            if (modalInstance) modalInstance.hide();
+		        }
+		    });
+		}
+	});
+
+	// 필터
+	document.addEventListener('DOMContentLoaded', () => {
+	    const filterForm = document.querySelector('form[th\\:action="@{/incomeexpense/filter}"]');
+
+	    // 폼 제출 시 검증
+	    filterForm.addEventListener('submit', (e) => {
+	        const year = filterForm.querySelector('input[name="year"]').value.trim();
+	        const month = filterForm.querySelector('input[name="month"]').value.trim();
+
+	        if ((year && !month) || (!year && month)) {
+	            e.preventDefault();
+	            alert('년도와 월은 반드시 함께 입력해야 합니다.');
+	        }
+	    });
+
+	    // 달력 월 이동 버튼과 필터 연동 (원하면)
+	    const prevMonthBtn = document.getElementById('prevMonth');
+	    const nextMonthBtn = document.getElementById('nextMonth');
+
+	    prevMonthBtn.addEventListener('click', () => {
+	        const yearInput = filterForm.querySelector('input[name="year"]');
+	        const monthInput = filterForm.querySelector('input[name="month"]');
+
+	        let year = parseInt(yearInput.value) || new Date().getFullYear();
+	        let month = parseInt(monthInput.value) || new Date().getMonth() + 1;
+
+	        month -= 1;
+	        if (month < 1) {
+	            month = 12;
+	            year -= 1;
+	        }
+
+	        yearInput.value = year;
+	        monthInput.value = month;
+	        filterForm.submit();
+	    });
+
+	    nextMonthBtn.addEventListener('click', () => {
+	        const yearInput = filterForm.querySelector('input[name="year"]');
+	        const monthInput = filterForm.querySelector('input[name="month"]');
+
+	        let year = parseInt(yearInput.value) || new Date().getFullYear();
+	        let month = parseInt(monthInput.value) || new Date().getMonth() + 1;
+
+	        month += 1;
+	        if (month > 12) {
+	            month = 1;
+	            year += 1;
+	        }
+
+	        yearInput.value = year;
+	        monthInput.value = month;
+	        filterForm.submit();
+	    });
+	});
+
+    // 초기화
+    (async function init(){
         await loadEvents();
         renderCalendar();
+		await loadMonthlySummary();
     })();
-
 })();
 </script>
+
 </body>
 </html>

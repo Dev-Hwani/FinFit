@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mysite.finfit.account.IncomeExpense.Type;
 import com.mysite.finfit.user.User;
 
 import lombok.RequiredArgsConstructor;
@@ -72,12 +73,14 @@ public class IncomeExpenseController {
     @PostMapping("/incomeexpense/update")
     public String updateIncomeExpense(
             @RequestParam("id") Long id,
+            @RequestParam("type") Type type,
             @RequestParam("category") String category,
             @RequestParam("amount") BigDecimal amount,
             @RequestParam("date") LocalDate date,
             @RequestParam(value = "description", required = false) String description
     ) {
         IncomeExpense ie = incomeExpenseService.findById(id); // ✅ 서비스에 추가 필요
+        ie.setType(type);
         ie.setCategory(category);
         ie.setAmount(amount);
         ie.setDate(date);
@@ -94,7 +97,7 @@ public class IncomeExpenseController {
         return "redirect:/incomeexpense";
     }
 
- // ✅ 날짜·카테고리·년도·월 필터링
+    // ✅ 날짜·카테고리·년도·월 필터링
     @GetMapping("/incomeexpense/filter")
     public String filterIncomeExpense(
             @RequestParam(name = "category", required = false) String category,
@@ -150,7 +153,9 @@ public class IncomeExpenseController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = incomeExpenseService.getUserByUsername(auth.getName());
         List<IncomeExpense> list = incomeExpenseService.getIncomeExpensesByUser(user);
+
         return list.stream().map(ie -> Map.of(
+                "id", ie.getId().toString(), 
                 "title", ie.getType() + " " + ie.getAmount(),
                 "start", ie.getDate().toString(),
                 "color", ie.getType() == IncomeExpense.Type.INCOME ? "green" : "red",
@@ -158,5 +163,19 @@ public class IncomeExpenseController {
                 "description", ie.getDescription()
         )).toList();
     }
+    
+    // ✅ 월별 요약 AJAX용 API
+    @GetMapping("/incomeexpense/summary")
+    @ResponseBody
+    public Map<String, BigDecimal> getMonthlySummary(
+            @RequestParam("year") int year,
+            @RequestParam("month") int month
+    ) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = incomeExpenseService.getUserByUsername(auth.getName());
+
+        return incomeExpenseService.getMonthlySummary(user, year, month);
+    }
+
 
 }

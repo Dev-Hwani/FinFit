@@ -46,26 +46,26 @@ FinFit은 개인의 수입과 지출을 효율적이고 안전하게 관리하�
   - 프론트엔드에서 통계와 데이터를 동적으로 조회 가능
 
  ## 화면 설명
-  - 메인 페이지
- <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/83e5793d-4e21-49d5-bc4b-666a52c85ad1" />
+ - 메인 페이지
+   <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/83e5793d-4e21-49d5-bc4b-666a52c85ad1" />
 
 - 회원가입
-<img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/a1eff1f2-7e00-48df-9dfd-59a12eb33e65" />
+  <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/a1eff1f2-7e00-48df-9dfd-59a12eb33e65" />
 
 - 로그인
-<img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/580bb8f7-5a7d-4947-a3a3-193b329ea0fc" />
+  <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/580bb8f7-5a7d-4947-a3a3-193b329ea0fc" />
 
 - 가계부 페이지
-<img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/96c463da-7815-4dc6-ab0c-a126efaab9c9" />
+  <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/96c463da-7815-4dc6-ab0c-a126efaab9c9" />
 
 - 달력
-<img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/cff8c718-bb6c-40e7-a159-12ff371213f4" />
+  <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/cff8c718-bb6c-40e7-a159-12ff371213f4" />
 
 - 가계부 상세 내역
-<img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/ed0edce8-7c9e-4c67-baff-cc7dc69eeaa0" />
+  <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/ed0edce8-7c9e-4c67-baff-cc7dc69eeaa0" />
 
 - 마이페이지
-<img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/62000c87-597c-493b-bb0c-6ee82ad1e82b" />
+  <img width="2559" height="1599" alt="image" src="https://github.com/user-attachments/assets/62000c87-597c-493b-bb0c-6ee82ad1e82b" />
 
 ## 프로젝트 구조
 ```

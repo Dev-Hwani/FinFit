@@ -15,7 +15,7 @@ Spring Security 인증 체계를 적용하여 실무 수준의 보안과 유지�
 
 ## 기술 스택
 - Backend: Java, Spring Boot, Spring Security, JPA, Hibernate
-- Frontend: HTML, CSS, JavaScript, Bootstrap, Tymeleaf
+- Frontend: HTML, CSS, JavaScript, Bootstrap, Thymeleaf
 - Database: MySQL
 - Server: Tomcat
 
